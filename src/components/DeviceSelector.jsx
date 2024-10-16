@@ -149,7 +149,6 @@ const DeviceSelector = () => {
             autoPlay
             loop
             className="media-fullscreen"
-            muted
           >
             <source src={cachedUrl} type="video/mp4" />
             Seu navegador não suporta a tag de vídeo.
