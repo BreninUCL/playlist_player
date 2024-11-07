@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { API_URL } from '../config';
 import './deviceSelector.css';
 
+const CACHE_NAME = 'ArquivosPlayList';
+
 const DeviceSelector = () => {
   const [devices, setDevices] = useState([]);
   const [error, setError] = useState('');
@@ -9,7 +11,6 @@ const DeviceSelector = () => {
   const [playlistContent, setPlaylistContent] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [cache, setCache] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const intervalRef = React.useRef();
@@ -73,8 +74,7 @@ const DeviceSelector = () => {
       }
 
       const data = await response.json();
-
-      //cacheia todas as midias
+      
       await cachePlaylistMedia(data);
 
       setPlaylistContent(data);
@@ -89,28 +89,46 @@ const DeviceSelector = () => {
   };
 
   const cachePlaylistMedia = async (playlist) => {
-    const cachedData = { ...cache };
-
-    //cria uma lista de promises
-    const mediaPromises = playlist.contents.map(async (item) => {
-      if (item.contentType === 'file' && item.media) {
-        const mediaUrl = `${playlist.base_url}/${item.media.file_url}`;
-
-        if (!cachedData[mediaUrl]) {
+    const cache = await caches.open(CACHE_NAME);
+  
+    try {
+      const mediaPromises = playlist.contents.map(async (item) => {
+        if (item.contentType === 'file' && item.media) {
+          const mediaUrl = `${playlist.base_url}/${item.media.file_url}`;
+  
           try {
-            const response = await fetch(mediaUrl);
-            const blob = await response.blob();
-            cachedData[mediaUrl] = URL.createObjectURL(blob);
+            const cachedResponse = await cache.match(mediaUrl);
+  
+            if (cachedResponse) {
+              const blob = await cachedResponse.blob();
+              item.media.cachedUrl = URL.createObjectURL(blob);
+            } else {
+              const response = await fetch(mediaUrl);
+  
+              if (!response.ok) {
+                throw new Error('Erro no Download do Arquivo ' + mediaUrl);
+              }
+  
+              const responseClone = response.clone();
+              const blob = await response.blob();
+  
+              await cache.put(mediaUrl, responseClone);
+  
+              item.media.cachedUrl = URL.createObjectURL(blob);
+            }
           } catch (err) {
             console.error('Erro ao baixar mídia:', err);
-            throw new Error('Falha ao baixar algumas mídias.');
+            item.media.error = 'Falha ao baixar a mídia';
+            throw err; // Lançando o erro para interromper o Promise.all
           }
         }
-      }
-    });
-
-    await Promise.all(mediaPromises); //promise.all que o professor tinha falado
-    setCache(cachedData);
+      });
+  
+      await Promise.all(mediaPromises); //promise.all que o professor falou
+    } catch (err) {
+      console.error('Erro ao cachear todas as mídias:', err);
+      throw new Error('Falha ao cachear todas as mídias, o carregamento foi interrompido.');
+    }
   };
 
   useEffect(() => {
@@ -162,7 +180,7 @@ const DeviceSelector = () => {
 
     const { base_url } = playlistContent;
     const mediaUrl = `${base_url}/${currentItem.media?.file_url}`;
-    const cachedUrl = cache[mediaUrl] || mediaUrl;
+    const cachedUrl = currentItem.media?.cachedUrl || mediaUrl;
 
     if (currentItem.contentType === 'file' && currentItem.media) {
       if (currentItem.media.file_extension === 'mp4') {
