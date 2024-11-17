@@ -1,10 +1,11 @@
 .device-selector {
-  max-width: 700px; /* Aumentando o tamanho do seletor */
+  max-width: 100%;
+  width: 700px; /* Controle do tamanho máximo */
   margin: 2rem auto;
-  padding: 2rem; /* Aumentando o padding */
-  background: linear-gradient(to bottom right, #e0e7ff, #ffffff); /* Adicionando gradiente */
-  border-radius: 12px; /* Aumentando a borda arredondada */
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* Sombra maior para profundidade */
+  padding: 2rem;
+  background: linear-gradient(to bottom right, #e0e7ff, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
   font-family: 'Arial', sans-serif;
   color: #333333;
   transition: all 0.3s ease-in-out;
@@ -27,23 +28,23 @@
 .device-selector form {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem; /* Ajustando espaçamento */
+  gap: 1.2rem;
   width: 100%;
-  max-width: 500px; /* Largura máxima aumentada */
+  max-width: 500px;
 }
 
 .device-selector label {
   font-weight: bold;
   margin-bottom: 0.5rem;
-  font-size: 1.6rem; /* Aumentando a fonte */
+  font-size: 1.6rem;
   color: #333333;
 }
 
 .device-selector select {
-  padding: 1.2rem; /* Aumentando o padding */
-  border-radius: 8px; /* Bordas mais arredondadas */
+  padding: 1.2rem;
+  border-radius: 8px;
   border: 1px solid #ccc;
-  font-size: 1.4rem; /* Aumentando a fonte */
+  font-size: 1.4rem;
   cursor: pointer;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
@@ -55,19 +56,19 @@
 }
 
 .device-selector button {
-  padding: 1rem 2rem; /* Aumentando padding */
+  padding: 1rem 2rem;
   background-color: #5c6bc0;
   color: white;
   border: none;
-  border-radius: 8px; /* Bordas mais arredondadas */
-  font-size: 1.4rem; /* Aumentando a fonte */
+  border-radius: 8px;
+  font-size: 1.4rem;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
 }
 
 .device-selector button:hover {
   background-color: #3f51b5;
-  transform: scale(1.05); /* Efeito de "zoom" ao passar o mouse */
+  transform: scale(1.05);
 }
 
 .device-selector button:disabled {
@@ -87,10 +88,12 @@
   color: #f44336;
   font-weight: bold;
   margin-bottom: 1rem;
-  font-size: 1.6rem; /* Aumentando a fonte */
+  font-size: 1.6rem;
 }
 
 .cardapio {
+  max-height: 80vh; /* Define uma altura máxima */
+  overflow-y: auto; /* Adiciona rolagem vertical */
   margin-top: 2rem;
   display: flex;
   flex-wrap: wrap;
@@ -100,7 +103,7 @@
 }
 
 .cardapio h3 {
-  font-size: 2.2rem; /* Aumentando o tamanho da fonte */
+  font-size: 2.2rem;
   margin-bottom: 1rem;
   color: #333333;
   text-align: center;
@@ -109,7 +112,7 @@
 .categoria {
   flex: 1 1 calc(45% - 1rem);
   background-color: #f9f9f9;
-  padding: 20px; /* Aumentando o padding */
+  padding: 15px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
@@ -117,7 +120,7 @@
 }
 
 .categoria h4 {
-  font-size: 1.6rem; /* Aumentando o tamanho da fonte */
+  font-size: 1.6rem;
   margin-bottom: 0.7rem;
   color: #5c6bc0;
   text-align: center;
@@ -143,12 +146,12 @@
 
 .categoria li strong {
   color: #5c6bc0;
-  font-size: 1.3rem; /* Aumentando o tamanho da fonte */
+  font-size: 1.3rem;
   margin-bottom: 6px;
 }
 
 .categoria li p {
-  font-size: 1.1rem; /* Aumentando o tamanho da fonte */
+  font-size: 1.1rem;
   color: #555555;
 }
 
@@ -201,7 +204,7 @@
 }
 
 .cardapio.fullscreen h3 {
-  font-size: 2.8rem; /* Aumentando o tamanho da fonte */
+  font-size: 2.8rem;
   color: #333333;
   text-align: center;
   margin-bottom: 2rem;
@@ -216,7 +219,7 @@
 }
 
 .cardapio.fullscreen .categoria h4 {
-  font-size: 1.8rem; /* Aumentando o tamanho da fonte */
+  font-size: 1.8rem;
   color: #e67e22;
   text-align: center;
 }
@@ -230,7 +233,7 @@
 }
 
 .cardapio.fullscreen .categoria li {
-  padding: 20px; /* Aumentando o padding */
+  padding: 20px;
   background-color: #ffffff;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -241,11 +244,11 @@
 }
 
 .cardapio.fullscreen .categoria li strong {
-  font-size: 1.5rem; /* Aumentando o tamanho da fonte */
+  font-size: 1.5rem;
   color: #e67e22;
 }
 
 .cardapio.fullscreen .categoria li p {
-  font-size: 1.2rem; /* Aumentando o tamanho da fonte */
+  font-size: 1.2rem;
   color: #555555;
 }
