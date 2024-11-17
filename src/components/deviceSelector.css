@@ -1,143 +1,251 @@
-/* Estilo para o contêiner da seleção de dispositivos */
-.device-selector-container {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 30px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  z-index: 2;
-  /* Garante que o formulário de seleção fique acima se necessário */
-  position: relative;
+.device-selector {
+  max-width: 700px; /* Aumentando o tamanho do seletor */
+  margin: 2rem auto;
+  padding: 2rem; /* Aumentando o padding */
+  background: linear-gradient(to bottom right, #e0e7ff, #ffffff); /* Adicionando gradiente */
+  border-radius: 12px; /* Aumentando a borda arredondada */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* Sombra maior para profundidade */
+  font-family: 'Arial', sans-serif;
+  color: #333333;
+  transition: all 0.3s ease-in-out;
 }
 
-/* Estilo para o título da seleção de dispositivos */
-.title {
-  text-align: center;
-  color: #2c3e50;
-  font-size: 2rem;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-}
-
-/* Select de dispositivos */
-.device-select {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 20px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  font-size: 1.25rem;
-  color: #333;
-  background-color: #f9f9f9;
-  transition: border-color 0.3s ease;
-  outline: none;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.device-select:focus {
-  border-color: #4CAF50;
-}
-
-/* Botão de submit */
-.submit-button {
-  padding: 12px 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1.25rem;
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 1px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.submit-button:hover {
-  background-color: #45a049;
-  transform: scale(1.05);
-}
-
-/* Estilo para a playlist em tela cheia */
-.playlist-content {
-  position: fixed;
-  top: 0;
-  left: 0;
+.device-selector.fullscreen {
   width: 100vw;
   height: 100vh;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  background-color: whitesmoke;
-  z-index: 1;
-  /* Fica atrás do seletor */
+  justify-content: flex-start;
+  box-shadow: none;
+  overflow: hidden;
 }
 
-h3 {
-  color: white;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-/* Estilo para mídia (imagem ou vídeo) ocupando a tela inteira */
-.media-content {
+.device-selector form {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+  flex-direction: column;
+  gap: 1.2rem; /* Ajustando espaçamento */
   width: 100%;
-  background-color: #000;
+  max-width: 500px; /* Largura máxima aumentada */
 }
 
-.media-image,
-.media-video {
-  max-width: 100%;
-  max-height: 100%;
+.device-selector label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 1.6rem; /* Aumentando a fonte */
+  color: #333333;
+}
+
+.device-selector select {
+  padding: 1.2rem; /* Aumentando o padding */
+  border-radius: 8px; /* Bordas mais arredondadas */
+  border: 1px solid #ccc;
+  font-size: 1.4rem; /* Aumentando a fonte */
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.device-selector select:focus {
+  border-color: #5c6bc0;
+  box-shadow: 0 0 4px rgba(92, 107, 192, 0.5);
+  outline: none;
+}
+
+.device-selector button {
+  padding: 1rem 2rem; /* Aumentando padding */
+  background-color: #5c6bc0;
+  color: white;
+  border: none;
+  border-radius: 8px; /* Bordas mais arredondadas */
+  font-size: 1.4rem; /* Aumentando a fonte */
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.device-selector button:hover {
+  background-color: #3f51b5;
+  transform: scale(1.05); /* Efeito de "zoom" ao passar o mouse */
+}
+
+.device-selector button:disabled {
+  background-color: #cfd8dc;
+  cursor: not-allowed;
+}
+
+.device-selector button.device-change-button {
+  display: none;
+}
+
+.device-selector.fullscreen .device-change-button {
+  display: block;
+}
+
+.error {
+  color: #f44336;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-size: 1.6rem; /* Aumentando a fonte */
+}
+
+.cardapio {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+  padding: 2rem;
+}
+
+.cardapio h3 {
+  font-size: 2.2rem; /* Aumentando o tamanho da fonte */
+  margin-bottom: 1rem;
+  color: #333333;
+  text-align: center;
+}
+
+.categoria {
+  flex: 1 1 calc(45% - 1rem);
+  background-color: #f9f9f9;
+  padding: 20px; /* Aumentando o padding */
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  color: #333333;
+}
+
+.categoria h4 {
+  font-size: 1.6rem; /* Aumentando o tamanho da fonte */
+  margin-bottom: 0.7rem;
+  color: #5c6bc0;
+  text-align: center;
+}
+
+.categoria ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.categoria li {
+  flex: 1 1 calc(50% - 0.5rem);
+  background-color: #ffffff;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333333;
+}
+
+.categoria li strong {
+  color: #5c6bc0;
+  font-size: 1.3rem; /* Aumentando o tamanho da fonte */
+  margin-bottom: 6px;
+}
+
+.categoria li p {
+  font-size: 1.1rem; /* Aumentando o tamanho da fonte */
+  color: #555555;
+}
+
+.cardapio strong {
+  color: #5c6bc0;
+}
+
+.media-fullscreen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.html-content {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #ffffff;
+}
+
+.device-selector.fullscreen-mode {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.device-selector .media-fullscreen {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
-
-.media-fullscreen video {
-  outline: none;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
+.device-selector .html-content {
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+  overflow: auto;
 }
 
-.modal-content {
-  background-color: #fff;
+.cardapio.fullscreen {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.cardapio.fullscreen h3 {
+  font-size: 2.8rem; /* Aumentando o tamanho da fonte */
+  color: #333333;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.cardapio.fullscreen .categoria {
+  flex: 1 1 100%;
+  background-color: #f9f9f9;
   padding: 20px;
-  border-radius: 8px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cardapio.fullscreen .categoria h4 {
+  font-size: 1.8rem; /* Aumentando o tamanho da fonte */
+  color: #e67e22;
   text-align: center;
 }
 
-.modal-content p {
-  margin: 0;
-  font-size: 18px;
+.cardapio.fullscreen .categoria ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
-.exit-modal {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  background-color: none;
-  z-index: 1000;
+.cardapio.fullscreen .categoria li {
+  padding: 20px; /* Aumentando o padding */
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #333333;
 }
 
-.exit-button {
-  background-color: rgba(255, 255, 255, 0.5);
+.cardapio.fullscreen .categoria li strong {
+  font-size: 1.5rem; /* Aumentando o tamanho da fonte */
+  color: #e67e22;
+}
+
+.cardapio.fullscreen .categoria li p {
+  font-size: 1.2rem; /* Aumentando o tamanho da fonte */
+  color: #555555;
 }
