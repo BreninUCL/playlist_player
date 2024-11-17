@@ -43,47 +43,88 @@ const DeviceSelector = () => {
     }
   };
 
-  const fetchCardapio = async (cardapioId) => {
-    try {
-      console.log('Buscando cardápio com ID:', cardapioId);
-      const response = await fetch(`${API_URL}/cardapio/${cardapioId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        },
-      });
+const cacheCardapio = async (cardapio) => {
+  const cache = await caches.open(CACHE_NAME);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Erro ao buscar cardápio');
-      }
+  try {
+    // Itera sobre o conteúdo do cardápio para identificar mídias a serem cacheadas
+    const mediaPromises = cardapio.content.map(async (categoria) => {
+      if (categoria.produtos && Array.isArray(categoria.produtos)) {
+        for (const produto of categoria.produtos) {
+          if (produto.media && produto.media.file_url) {
+            const mediaUrl = `${cardapio.base_url}/${produto.media.file_url}`;
+            try {
+              const cachedResponse = await cache.match(mediaUrl);
 
-      const data = await response.json();
-      console.log('Cardápio recebido:', data);
-
-      if (data?.data?.length > 0) {
-        const cardapio = data.data[0];
-        if (cardapio?.content) {
-          try {
-            cardapio.content = JSON.parse(cardapio.content);
-            console.log('Conteúdo do cardápio convertido:', cardapio.content);
-          } catch (err) {
-            console.error('Erro ao parsear conteúdo do cardápio:', err);
-            setError('Erro ao processar o conteúdo do cardápio');
-            return;
+              if (!cachedResponse) {
+                const response = await fetch(mediaUrl);
+                if (!response.ok) {
+                  throw new Error('Erro no download da mídia ' + mediaUrl);
+                }
+                await cache.put(mediaUrl, response.clone());
+              }
+            } catch (err) {
+              console.error('Erro ao cachear mídia do cardápio:', err);
+              produto.media.error = 'Falha ao cachear a mídia';
+            }
           }
         }
-        setCardapioContent(cardapio);
-      } else {
-        setError('O cardápio está vazio.');
-        console.warn('O cardápio retornou vazio:', data);
       }
-    } catch (err) {
-      setError(err.message);
-      console.error('Erro ao buscar cardápio:', err);
+    });
+
+    await Promise.all(mediaPromises);
+  } catch (err) {
+    console.error('Erro ao cachear mídias do cardápio:', err);
+    throw new Error('Falha ao cachear todas as mídias do cardápio.');
+  }
+};
+
+// Modifique a função fetchCardapio para incluir o cacheamento após buscar o cardápio com sucesso
+const fetchCardapio = async (cardapioId) => {
+  try {
+    console.log('Buscando cardápio com ID:', cardapioId);
+    const response = await fetch(`${API_URL}/cardapio/${cardapioId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Erro ao buscar cardápio');
     }
-  };
+
+    const data = await response.json();
+    console.log('Cardápio recebido:', data);
+
+    if (data?.data?.length > 0) {
+      const cardapio = data.data[0];
+      if (cardapio?.content) {
+        try {
+          cardapio.content = JSON.parse(cardapio.content);
+          console.log('Conteúdo do cardápio convertido:', cardapio.content);
+
+          // Adiciona cacheamento aqui
+          await cacheCardapio(cardapio);
+        } catch (err) {
+          console.error('Erro ao parsear conteúdo do cardápio:', err);
+          setError('Erro ao processar o conteúdo do cardápio');
+          return;
+        }
+      }
+      setCardapioContent(cardapio);
+    } else {
+      setError('O cardápio está vazio.');
+      console.warn('O cardápio retornou vazio:', data);
+    }
+  } catch (err) {
+    setError(err.message);
+    console.error('Erro ao buscar cardápio:', err);
+  }
+};
+
 
   const handleDeviceSelection = async (e) => {
     e.preventDefault();
