@@ -1,195 +1,143 @@
-.device-selector {
-  max-width: 700px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: linear-gradient(to bottom right, #e0e7ff, #ffffff);
-  border-radius: 12px;
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-  font-family: 'Arial', sans-serif;
-  color: #333333;
-  transition: all 0.3s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.device-selector.fullscreen {
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  border-radius: 0;
-  box-shadow: none;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.device-selector form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  width: 100%;
+/* Estilo para o contêiner da seleção de dispositivos */
+.device-selector-container {
   max-width: 500px;
-}
-
-.device-selector label {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  font-size: 1.6rem;
-  color: #333333;
-}
-
-.device-selector select {
-  padding: 1.2rem;
-  border-radius: 8px;
+  margin: 0 auto;
+  padding: 30px;
   border: 1px solid #ccc;
-  font-size: 1.4rem;
-  cursor: pointer;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  /* Garante que o formulário de seleção fique acima se necessário */
+  position: relative;
 }
 
-.device-selector select:focus {
-  border-color: #5c6bc0;
-  box-shadow: 0 0 4px rgba(92, 107, 192, 0.5);
+/* Estilo para o título da seleção de dispositivos */
+.title {
+  text-align: center;
+  color: #2c3e50;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+/* Select de dispositivos */
+.device-select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  color: #333;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
   outline: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.device-selector button {
-  padding: 1rem 2rem;
-  background-color: #5c6bc0;
+.device-select:focus {
+  border-color: #4CAF50;
+}
+
+/* Botão de submit */
+.submit-button {
+  padding: 12px 20px;
+  background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 1.4rem;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.device-selector button:hover {
-  background-color: #3f51b5;
+.submit-button:hover {
+  background-color: #45a049;
   transform: scale(1.05);
 }
 
-.device-selector button:disabled {
-  background-color: #cfd8dc;
-  cursor: not-allowed;
-}
-
-.device-selector button.device-change-button {
-  display: none;
-}
-
-.device-selector.fullscreen .device-change-button {
-  display: block;
-}
-
-.error {
-  color: #f44336;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  font-size: 1.6rem;
-}
-
-.cardapio {
-  margin-top: 2rem;
+/* Estilo para a playlist em tela cheia */
+.playlist-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: space-between;
-  padding: 2rem;
+  justify-content: center;
+  align-items: center;
+  background-color: whitesmoke;
+  z-index: 1;
+  /* Fica atrás do seletor */
 }
 
-.cardapio h3 {
-  font-size: 2.2rem;
-  margin-bottom: 1rem;
-  color: #333333;
+h3 {
+  color: white;
   text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Estilo para mídia (imagem ou vídeo) ocupando a tela inteira */
+.media-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
   width: 100%;
+  background-color: #000;
 }
 
-.categoria {
-  flex: 1 1 calc(48% - 1rem);
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.media-image,
+.media-video {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
-.categoria ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+
+.media-fullscreen video {
+  outline: none;
 }
 
-.categoria li {
-  padding: 15px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.categoria li strong {
-  color: #5c6bc0;
-  font-size: 1.3rem;
-}
-
-.categoria li p {
-  font-size: 1.1rem;
-  color: #555555;
-}
-
-.cardapio.fullscreen {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 2rem;
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  padding: 2rem;
-  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.cardapio.fullscreen h3 {
-  font-size: 2.8rem;
-  color: #333333;
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
   text-align: center;
-  margin-bottom: 2rem;
 }
 
-.cardapio.fullscreen .categoria {
-  flex: 1 1 100%;
-  background-color: #f9f9f9;
-  padding: 20px;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.modal-content p {
+  margin: 0;
+  font-size: 18px;
 }
 
-.cardapio.fullscreen .categoria ul {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+.exit-modal {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: none;
+  z-index: 1000;
 }
 
-.cardapio.fullscreen .categoria li {
-  padding: 20px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.cardapio.fullscreen .categoria li strong {
-  font-size: 1.5rem;
-  color: #e67e22;
-}
-
-.cardapio.fullscreen .categoria li p {
-  font-size: 1.2rem;
-  color: #555555;
+.exit-button {
+  background-color: rgba(255, 255, 255, 0.5);
 }
