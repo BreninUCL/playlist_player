@@ -8,8 +8,10 @@ const CardapioViewer = ({ cardapioId }) => {
   const [cardapio, setCardapio] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [currentCategory, setCurrentCategory] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(0);
+
+  const itemsPerPage = 4; // Exibir 4 produtos por vez
 
   useEffect(() => {
     const fetchAndCacheCardapio = async () => {
@@ -62,34 +64,27 @@ const CardapioViewer = ({ cardapioId }) => {
   }, [cardapioId]);
 
   useEffect(() => {
-    const calculateItemsPerPage = () => {
-      const itemHeight = 150; // Ajuste o valor conforme o tamanho real dos itens
-      const screenHeight = window.innerHeight;
-      const itemsPerColumn = Math.floor(screenHeight / itemHeight);
-      setItemsPerPage(itemsPerColumn);
-    };
-
-    calculateItemsPerPage();
-    window.addEventListener('resize', calculateItemsPerPage);
-
-    return () => {
-      window.removeEventListener('resize', calculateItemsPerPage);
-    };
-  }, []);
-
-  useEffect(() => {
     if (cardapio) {
       const interval = setInterval(() => {
-        setCurrentPage((prevPage) =>
-          prevPage < Math.ceil(cardapio.content.length / itemsPerPage) - 1
-            ? prevPage + 1
-            : 0
-        );
-      }, 5000); // Intervalo de 5 segundos para mudar a página automaticamente
+        setCurrentPage((prevPage) => {
+          const totalPages = Math.ceil(
+            cardapio.content[currentCategory].produtos.length / itemsPerPage
+          );
+
+          if (prevPage < totalPages - 1) {
+            return prevPage + 1;
+          } else {
+            setCurrentCategory((prevCategory) =>
+              prevCategory < cardapio.content.length - 1 ? prevCategory + 1 : 0
+            );
+            return 0;
+          }
+        });
+      }, 5000); // Alterna a cada 5 segundos
 
       return () => clearInterval(interval);
     }
-  }, [cardapio, itemsPerPage]);
+  }, [cardapio, currentCategory]);
 
   if (loading) {
     return <p>Carregando cardápio...</p>;
@@ -103,31 +98,30 @@ const CardapioViewer = ({ cardapioId }) => {
     return <p className="error">Cardápio não encontrado.</p>;
   }
 
-  const produtos = cardapio.content.slice(
-    currentPage * itemsPerPage,
-    (currentPage + 1) * itemsPerPage
+  const categoria = cardapio.content[currentCategory];
+  const startIndex = currentPage * itemsPerPage;
+  const produtos = categoria.produtos.slice(
+    startIndex,
+    startIndex + itemsPerPage
   );
 
   return (
     <div className="cardapio-container">
-      <h2>{cardapio.name}</h2>
-      <div className="cardapio-content">
-        {produtos.map((categoria, index) => (
-          <div key={index} className="categoria">
-            <h3>{categoria.nome_categoria}</h3>
-            <ul className="produtos-list">
-              {categoria.produtos.map((produto, idx) => (
-                <li key={idx} className="produto">
-                  <strong>{produto.nome}</strong>
-                  <p>{produto.descricao}</p>
-                  <div className="produto-preco">
-                    <span className="preco">R$ {(Number(produto.preco) || 0).toFixed(2)}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+      <div className="categoria">
+        <h3 className="categoria-nome">{categoria.nome_categoria}</h3>
+        <ul className="produtos-list">
+          {produtos.map((produto, idx) => (
+            <li key={idx} className="produto">
+              <div className="produto-info">
+                <strong className="produto-nome">{produto.nome}</strong>
+                <p className="produto-descricao">{produto.descricao}</p>
+              </div>
+              <div className="produto-preco">
+                <span>R$ {(Number(produto.preco) || 0).toFixed(2)}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
